@@ -1,4 +1,20 @@
-#include "gerador.h"
+#include "utils.h"
+
+char avlWorstCasePath[] = "data/worstCaseAVL.csv";
+char b1WorstCasePath[] = "data/worstCaseB1.csv";
+char b5WorstCasePath[] = "data/worstCaseB5.csv";
+char b10WorstCasePath[] = "data/worstCaseB10.csv";
+char rubroNegraWorstCasePath[] = "data/worstCaseRubroNegra.csv";
+
+char avlAvgCasePath[] = "data/avgCaseAVL.csv";
+char b1AvgCasePath[] = "data/avgCaseB1.csv";
+char b5AvgCasePath[] = "data/avgCaseB5.csv";
+char b10AvgCasePath[] = "data/avgCaseB10.csv";
+char rubroNegraAvgCasePath[] = "data/avgCaseRubroNegra.csv";
+
+void printColumnNamesinFile(FILE *fptr) {
+    fprintf(fptr, "chaves,operações\n");
+}
 
 int gerarQuantidadeDeChavesAleatoria() {
     return 1 + rand() % 1000;
@@ -10,7 +26,7 @@ int * gerarConjuntoPiorCaso(int n) {
     int * conjunto = malloc(n * sizeof(int));
 
     // randomiza se será crescente ou decrescente
-    int crescente_ou_decrescente = rand()%2;
+    int crescente_ou_decrescente = rand() % 2;
 
     // gera os valores ordenados
 
