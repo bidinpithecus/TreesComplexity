@@ -13,7 +13,15 @@ extern char b5AvgCasePath[];
 extern char b10AvgCasePath[];
 extern char rubroNegraAvgCasePath[];
 
+extern int numberOfKeys;
+extern int numberOfExecutions;
+extern int sizeLimit;
+
+extern register_t counter;
+
 void printColumnNamesinFile(FILE *fptr);
 int gerarQuantidadeDeChavesAleatoria();
-int *gerarConjuntoPiorCaso(int n);
 int *gerarConjuntoCasoMedio(int n);
+int randomNum(int max);
+void populateRandomArray(int array[], int size);
+void eliminateDuplicates(int array[], int *size);

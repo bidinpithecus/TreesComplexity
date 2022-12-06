@@ -1,242 +1,198 @@
 #include "arvore_avl.h"
+#include "utils.h"
 
 ArvoreAVL* criarArvoreAVL() {
-    ArvoreAVL *arvore = malloc(sizeof(ArvoreAVL));
-    arvore->raiz = NULL;
+	ArvoreAVL *arvore = malloc(sizeof(ArvoreAVL));
+	arvore->raiz = NULL;
 
-    return arvore;
+	return arvore;
 }
 
-No_AVL* adicionarNoAVL(No_AVL* no, int valor, int * contador) {
-    (*contador) += 1;
-    if (valor > no->valor) {
-        (*contador) += 1;
-        if (no->direita == NULL) {
-            No_AVL* novo = malloc(sizeof(No_AVL));
-            novo->valor = valor;
-            (*contador) += 1;
-            novo->pai = no;
-            novo->direita = NULL;
-            novo->esquerda = NULL;
+No_AVL* adicionarNoAVL(No_AVL* no, int valor) {
+	counter++;
+	if (valor > no->valor) {
+		if (no->direita == NULL) {
+			No_AVL* novo = malloc(sizeof(No_AVL));
+			novo->valor = valor;
+			novo->pai = no;
+			novo->direita = NULL;
+			novo->esquerda = NULL;
+			no->direita = novo;
 
-            (*contador) += 1;
-            no->direita = novo;
+			return novo;
+		} else {
+			return adicionarNoAVL(no->direita, valor);
+		}
+	} else {
+		if (no->esquerda == NULL) {
+			No_AVL* novo = malloc(sizeof(No_AVL));
+			novo->valor = valor;
+			novo->pai = no;
+			novo->direita = NULL;
+			novo->esquerda = NULL;
+			no->esquerda = novo;
 
-            return novo;
-        } else {
-            return adicionarNoAVL(no->direita, valor, contador);
-        }
-    } else {
-        (*contador) += 1;
-        if (no->esquerda == NULL) {
-            No_AVL* novo = malloc(sizeof(No_AVL));
-            novo->valor = valor;
-            (*contador) += 1;
-            novo->pai = no;
-            novo->direita = NULL;
-            novo->esquerda = NULL;
-
-            (*contador) += 1;
-            no->esquerda = novo;
-
-            return novo;
-        } else {
-            return adicionarNoAVL(no->esquerda, valor, contador);
-        }
-    }
+			return novo;
+		} else {
+			return adicionarNoAVL(no->esquerda, valor);
+		}
+	}
 }
 
-No_AVL* adicionarAVL(ArvoreAVL* arvore, int valor, int * contador) {
-    (*contador) += 1;
-    if (arvore->raiz == NULL) {
-        No_AVL* novo = malloc(sizeof(No_AVL));
-        novo->valor = valor;
-        novo->pai = NULL;
-        novo->direita = NULL;
-        novo->esquerda = NULL;
-        (*contador) += 1;
-        arvore->raiz = novo;
-        return novo;
-    } else {
-        No_AVL* no = adicionarNoAVL(arvore->raiz, valor, contador);
-        balanceamentoAVL(arvore, no, contador);
+No_AVL* adicionarAVL(ArvoreAVL* arvore, int valor) {
+	counter++;
+	if (arvore->raiz == NULL) {
+		No_AVL* novo = malloc(sizeof(No_AVL));
+		novo->valor = valor;
+		novo->pai = NULL;
+		novo->direita = NULL;
+		novo->esquerda = NULL;
+		arvore->raiz = novo;
 
-        return no;
-    }
+		return novo;
+	} else {
+		No_AVL* no = adicionarNoAVL(arvore->raiz, valor);
+		balanceamentoAVL(arvore, no);
+
+		return no;
+	}
 }
 
-void balanceamentoAVL(ArvoreAVL* arvore, No_AVL* no, int * contador) {
-    while (no != NULL) {
-        (*contador) += 1;
-        int fator = fbAVL(no, contador);
-        (*contador) += 1;
-        if (fator > 1) { // árvore mais pesada para esquerda
-            // rotação para a direita (++)
-            (*contador) += 1;
-            if (fbAVL(no->esquerda, contador) > 0) {
-                // printf("RSD(%d)\n",no->valor);
-                rsd(arvore, no, contador); //rotação simples a direita, pois o FB do filho tem sinal igual
-            } else {
-                // printf("RDD(%d)\n",no->valor);
-                rdd(arvore, no, contador); //rotação dupla a direita, pois o FB do filho tem sinal diferente (+-)
-            }
-        } else if (fator < -1) { // árvore mais pesada para a direita
-            // rotação para a esquerda (--)
-            (*contador) += 2;
-            if (fbAVL(no->direita, contador) < 0) {
-               // printf("RSE(%d)\n", no->valor);
-                rse(arvore, no, contador); //rotação simples a esquerda, pois o FB do filho tem sinal igual
-            } else {
-                // printf("RDE(%d)\n", no->valor);
-                rde(arvore, no, contador); //rotação dupla a esquerda, pois o FB do filho tem sinal diferente (-+)
-            }
-        } else {
-            (*contador) += 1;
-        }
+void balanceamentoAVL(ArvoreAVL* arvore, No_AVL* no) {
+	while (no != NULL) {
+		counter++;
+		int fator = fbAVL(no);
+		if (fator > 1) { // árvore mais pesada para esquerda
+			// rotação para a direita (++)
 
-        no = no->pai;
-    }
+			if (fbAVL(no->esquerda) > 0) {
+				// printf("RSD(%d)\n",no->valor);
+				rsd(arvore, no); //rotação simples a direita, pois o FB do filho tem sinal igual
+			} else {
+				// printf("RDD(%d)\n",no->valor);
+				rdd(arvore, no); //rotação dupla a direita, pois o FB do filho tem sinal diferente (+-)
+			}
+		} else if (fator < -1) { // árvore mais pesada para a direita
+			// rotação para a esquerda (--)
+			if (fbAVL(no->direita) < 0) {
+			   // printf("RSE(%d)\n", no->valor);
+				rse(arvore, no); //rotação simples a esquerda, pois o FB do filho tem sinal igual
+			} else {
+				// printf("RDE(%d)\n", no->valor);
+				rde(arvore, no); //rotação dupla a esquerda, pois o FB do filho tem sinal diferente (-+)
+			}
+		}
+
+		no = no->pai;
+	}
 }
 
-int alturaAVL(No_AVL* no, int * contador){
-//    // TODO: resolver segmentation fault
-//    (*contador) += 1;
-//    if (no == NULL) {
-//        return -1;
-//    }
+int alturaAVL(No_AVL* no) {
+	int esquerda = 0, direita = 0;
 
-    int esquerda = 0, direita = 0;
+	if (no->esquerda != NULL) {
+		esquerda = alturaAVL(no->esquerda) + 1;
+	}
 
-    (*contador) += 1;
-    if (no->esquerda != NULL) {
-        esquerda = alturaAVL(no->esquerda, contador) + 1;
-    }
+	if (no->direita != NULL) {
+		direita = alturaAVL(no->direita) + 1;
+	}
 
-    (*contador) += 1;
-    if (no->direita != NULL) {
-        direita = alturaAVL(no->direita, contador) + 1;
-    }
-
-    (*contador) += 1;
-    return esquerda > direita ? esquerda : direita; //max(esquerda,direita)
+	return esquerda > direita ? esquerda : direita;
 }
 
 // Quando o FB resultar em um valor diferente de 0, -1 ou 1, deverá ser realizada uma das operações de balanceamentoAVL
-int fbAVL(No_AVL* no, int * contador) {
-//    (*contador) += 1;
-//    // TODO: Resolver segmentation fault
-//    if (no == NULL) {
-//        return 0;
-//    }
+int fbAVL(No_AVL* no) {
+	int esquerda = 0,direita = 0;
 
-    int esquerda = 0,direita = 0;
+	counter++;
+	if (no->esquerda != NULL) {
+		esquerda = alturaAVL(no->esquerda) + 1;
+	}
 
-    (*contador) += 1;
-    if (no->esquerda != NULL) {
-        esquerda = alturaAVL(no->esquerda, contador) + 1;
-    }
+	if (no->direita != NULL) {
+		direita = alturaAVL(no->direita) + 1;
+	}
 
-    (*contador) += 1;
-    if (no->direita != NULL) {
-        direita = alturaAVL(no->direita, contador) + 1;
-    }
-
-    return esquerda - direita;
+	return esquerda - direita;
 }
 
 // Operações de balanceamentoAVL:
 // Rotação simples à esquerda(--): FB desbalanceado negativo, nó à direita com FB negativo
-No_AVL* rse(ArvoreAVL* arvore, No_AVL* no, int * contador) {
+No_AVL* rse(ArvoreAVL* arvore, No_AVL* no) {
 
-    No_AVL* pai = no->pai;
-    No_AVL* direita = no->direita;
+	No_AVL* pai = no->pai;
+	No_AVL* direita = no->direita;
 
-    (*contador) += 1;
-    no->direita = direita->esquerda;
-    (*contador) += 1;
-    no->pai = direita;
+	counter++;
+	no->direita = direita->esquerda;
+	no->pai = direita;
 
-    (*contador) += 1;
-    direita->esquerda = no;
-    (*contador) += 1;
-    direita->pai = pai;
+	direita->esquerda = no;
+	direita->pai = pai;
 
-    (*contador) += 1;
-    if (no->direita != NULL)
-        no->direita->pai = no;
+	if (no->direita != NULL) {
+		no->direita->pai = no;
+	}
 
-    (*contador) += 1;
-    if (pai == NULL) {
-        (*contador) += 1;
-        arvore->raiz = direita;
-    } else {
-        (*contador) += 1;
-        if (pai->esquerda == no) {
-            (*contador) += 1;
-            pai->esquerda = direita;
-        } else {
-            (*contador) += 1;
-            pai->direita = direita;
-        }
-    }
+	if (pai == NULL) {
+		arvore->raiz = direita;
+	} else {
+		if (pai->esquerda == no) {
+			pai->esquerda = direita;
+		} else {
+			pai->direita = direita;
+		}
+	}
 
-    return direita;
+	return direita;
 }
 
 // Rotação simples à direita(++): FB desbalanceado positivo, nó à esquerda com FB positivo
-No_AVL* rsd(ArvoreAVL* arvore, No_AVL* no, int * contador) {
-    No_AVL* pai = no->pai;
-    No_AVL* esquerda = no->esquerda;
+No_AVL* rsd(ArvoreAVL* arvore, No_AVL* no) {
+	No_AVL* pai = no->pai;
+	No_AVL* esquerda = no->esquerda;
 
-    (*contador) += 1;
-    no->esquerda = esquerda->direita;
-    (*contador) += 1;
-    no->pai = esquerda;
+	counter++;
+	no->esquerda = esquerda->direita;
+	no->pai = esquerda;
 
-    (*contador) += 1;
-    esquerda->direita = no;
-    (*contador) += 1;
-    esquerda->pai = pai;
+	esquerda->direita = no;
+	esquerda->pai = pai;
 
-    (*contador) += 1;
-    if (no->esquerda != NULL) {
-        (*contador) += 1;
-        no->esquerda->pai = no;
-    }
+	if (no->esquerda != NULL) {
+		no->esquerda->pai = no;
+	}
 
-    (*contador) += 1;
-    if (pai == NULL) {
-        (*contador) += 1;
-        arvore->raiz = esquerda;
-    } else if (pai->esquerda == no) {
-            (*contador) += 2;
-            pai->esquerda = esquerda;
-        } else {
-            (*contador) += 2;
-            pai->direita = esquerda;
-        }
+	if (pai == NULL) {
+		arvore->raiz = esquerda;
+	} else if (pai->esquerda == no) {
+		pai->esquerda = esquerda;
+	} else {
+		pai->direita = esquerda;
+	}
 
-    return esquerda;
+	return esquerda;
 }
 
 // Rotação dupla à esquerda(-+): FB desbalanceado negativo, nó à direita com FB positivo
-No_AVL* rde(ArvoreAVL* arvore, No_AVL* no, int * contador) {
-    (*contador) += 1;
-    no->direita = rsd(arvore, no->direita, contador);
-    return rse(arvore, no, contador);
+No_AVL* rde(ArvoreAVL* arvore, No_AVL* no) {
+	counter++;
+	no->direita = rsd(arvore, no->direita);
+	return rse(arvore, no);
 }
 
-// Rotação simples à direita(+-): FB desbalanceado positivo, nó à esquerda com FB negativo
-No_AVL* rdd(ArvoreAVL* arvore, No_AVL* no, int * contador) {
-    (*contador) += 1;
-    no->esquerda = rse(arvore, no->esquerda, contador);
-    return rsd(arvore, no, contador);
+// Rotação dupla à direita(+-): FB desbalanceado positivo, nó à esquerda com FB negativo
+No_AVL* rdd(ArvoreAVL* arvore, No_AVL* no) {
+	counter++;
+	no->esquerda = rse(arvore, no->esquerda);
+	return rsd(arvore, no);
 }
 
 void percorrerProfundidadeInOrderAVL(No_AVL* no, void (*callback)(int)) {
-    if (no != NULL) {
-        percorrerProfundidadeInOrderAVL(no->esquerda, callback);
-        callback(no->valor);
-        percorrerProfundidadeInOrderAVL(no->direita, callback);
-    }
+	if (no != NULL) {
+		percorrerProfundidadeInOrderAVL(no->esquerda, callback);
+		callback(no->valor);
+		percorrerProfundidadeInOrderAVL(no->direita, callback);
+	}
 }
