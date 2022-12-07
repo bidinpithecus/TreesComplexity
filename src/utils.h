@@ -1,3 +1,6 @@
+#ifndef __UTILS_H
+#define __UTILS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,12 +19,11 @@ extern char rubroNegraAvgCasePath[];
 extern int numberOfKeys;
 extern int numberOfExecutions;
 extern int sizeLimit;
+extern int step;
 
 extern register_t counter;
 
-void printColumnNamesinFile(FILE *fptr);
-int gerarQuantidadeDeChavesAleatoria();
-int *gerarConjuntoCasoMedio(int n);
-int randomNum(int max);
-void populateRandomArray(int array[], int size);
-void eliminateDuplicates(int array[], int *size);
+void printColumnNamesinFile(FILE*);
+int randomNum(int);
+
+#endif

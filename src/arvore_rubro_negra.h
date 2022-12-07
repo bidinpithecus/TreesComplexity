@@ -1,5 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef _ARVORE_RUBRO_NEGRA_H
+#define _ARVORE_RUBRO_NEGRA_H
+
+#include "utils.h"
 
 enum coloracao { Vermelho, Preto };
 typedef enum coloracao Cor;
@@ -17,12 +19,14 @@ typedef struct arvore_rubro_negra {
     struct no_rubro_negra* nulo;
 } ArvoreRubroNegra;
 
-NoRubroNegra* criarNoRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int, int * contador);
-void balancearRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int * contador);
-void rotacionarEsquerdaRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int * contador);
-void rotacionarDireitaRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int * contador);
+NoRubroNegra* criarNoRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int);
+void balancearRubroNegra(ArvoreRubroNegra*, NoRubroNegra*);
+void rotacionarEsquerdaRubroNegra(ArvoreRubroNegra*, NoRubroNegra*);
+void rotacionarDireitaRubroNegra(ArvoreRubroNegra*, NoRubroNegra*);
 ArvoreRubroNegra* criarRubroNegra();
-int vaziaRubroNegra(ArvoreRubroNegra*, int * contador);
-NoRubroNegra* adicionarRubroNegra(ArvoreRubroNegra*, int, int * contador);
-NoRubroNegra* adicionarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int valor, int * contador);
-void percorrerProfundidadeInOrderRubroNegra(ArvoreRubroNegra * arvore, NoRubroNegra * no, void (*callback)(int), int * contador);
+int vaziaRubroNegra(ArvoreRubroNegra*);
+NoRubroNegra* adicionarRubroNegra(ArvoreRubroNegra*, int);
+NoRubroNegra* adicionarNoRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, int);
+void percorrerProfundidadeInOrderRubroNegra(ArvoreRubroNegra*, NoRubroNegra*, void (*callback)(int));
+
+#endif

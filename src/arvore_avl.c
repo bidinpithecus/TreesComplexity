@@ -1,5 +1,4 @@
 #include "arvore_avl.h"
-#include "utils.h"
 
 ArvoreAVL* criarArvoreAVL() {
 	ArvoreAVL *arvore = malloc(sizeof(ArvoreAVL));

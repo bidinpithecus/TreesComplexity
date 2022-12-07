@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef __ARVORE_B_H
+#define __ARVORE_B_H
+
+#include "utils.h"
 
 typedef struct no_arvore_b {
     int total;
@@ -13,14 +15,16 @@ typedef struct arvoreB {
     int ordem;
 } ArvoreB;
 
-ArvoreB* criaArvoreB(int, int * contador);
-NoArvoreB* criaNoArvoreB(ArvoreB*, int * contador);
-void percorreArvoreB(NoArvoreB*, int * contador);
-int pesquisaBinariaArvoreB(NoArvoreB*, int, int * contador);
-int localizaChaveArvoreB(ArvoreB*, int, int * contador);
-NoArvoreB* localizaNoArvoreB(ArvoreB*, int, int * contador);
-void adicionaChaveNoArvoreB(NoArvoreB*, NoArvoreB*, int, int * contador);
-int transbordoArvoreB(ArvoreB*, NoArvoreB*, int * contador);
-NoArvoreB* divideNoArvoreB(ArvoreB*, NoArvoreB*, int * contador);
-void adicionaChaveRecursivoArvoreB(ArvoreB*, NoArvoreB*, NoArvoreB*, int, int * contador);
-void adicionaChaveArvoreB(ArvoreB*, int, int * contador);
+ArvoreB* criaArvoreB(int);
+NoArvoreB* criaNoArvoreB(ArvoreB*);
+void percorreArvoreB(NoArvoreB*);
+int pesquisaBinariaArvoreB(NoArvoreB*, int);
+int localizaChaveArvoreB(ArvoreB*, int);
+NoArvoreB* localizaNoArvoreB(ArvoreB*, int);
+void adicionaChaveNoArvoreB(NoArvoreB*, NoArvoreB*, int);
+int transbordoArvoreB(ArvoreB*, NoArvoreB*);
+NoArvoreB* divideNoArvoreB(ArvoreB*, NoArvoreB*);
+void adicionaChaveRecursivoArvoreB(ArvoreB*, NoArvoreB*, NoArvoreB*, int);
+void adicionaChaveArvoreB(ArvoreB*, int);
+
+#endif

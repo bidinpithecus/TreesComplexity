@@ -1,21 +1,21 @@
 #include "arvore_rubro_negra.h"
 
-ArvoreRubroNegra* criarRubroNegra(int * contador) {
+ArvoreRubroNegra* criarRubroNegra() {
     ArvoreRubroNegra *arvore = malloc(sizeof(ArvoreRubroNegra));
     arvore->nulo = NULL;
     arvore->raiz = NULL;
 
-    arvore->nulo = criarNoRubroNegra(arvore, NULL, 0, contador);
+    arvore->nulo = criarNoRubroNegra(arvore, NULL, 0);
     arvore->nulo->cor = Preto;
 
     return arvore;
 }
 
-int vaziaRubroNegra(ArvoreRubroNegra* arvore, int * contador) {
+int vaziaRubroNegra(ArvoreRubroNegra* arvore) {
     return arvore->raiz == NULL;
 }
 
-NoRubroNegra* criarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* pai, int valor, int * contador) {
+NoRubroNegra* criarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* pai, int valor) {
     NoRubroNegra* no = malloc(sizeof(NoRubroNegra));
 
     no->pai = pai;
@@ -26,45 +26,41 @@ NoRubroNegra* criarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* pai, int
     return no;
 }
 
-NoRubroNegra* adicionarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int valor, int * contador) {
-    (*contador) += 1;
+NoRubroNegra* adicionarNoRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int valor) {
+    counter++;
     if (valor > no->valor) {
-        (*contador) += 1;
         if (no->direita == arvore->nulo) {
-            (*contador) += 1;
-            no->direita = criarNoRubroNegra(arvore, no, valor, contador);
+            counter++;
+            no->direita = criarNoRubroNegra(arvore, no, valor);
             no->direita->cor = Vermelho;
 
             return no->direita;
         } else {
-            return adicionarNoRubroNegra(arvore, no->direita, valor, contador);
+            return adicionarNoRubroNegra(arvore, no->direita, valor);
         }
     } else {
-        (*contador) += 1;
         if (no->esquerda == arvore->nulo) {
-            (*contador) += 1;
-            no->esquerda = criarNoRubroNegra(arvore, no, valor, contador);
+            counter++;
+            no->esquerda = criarNoRubroNegra(arvore, no, valor);
             no->esquerda->cor = Vermelho;
 
             return no->esquerda;
         } else {
-            return adicionarNoRubroNegra(arvore, no->esquerda, valor, contador);
+            return adicionarNoRubroNegra(arvore, no->esquerda, valor);
         }
     }
 }
 
-NoRubroNegra* adicionarRubroNegra(ArvoreRubroNegra* arvore, int valor, int * contador) {
-    (*contador) += 1;
-    if (vaziaRubroNegra(arvore, contador)) {
-        (*contador) += 1;
-        arvore->raiz = criarNoRubroNegra(arvore, arvore->nulo, valor, contador);
-        (*contador) += 1;
+NoRubroNegra* adicionarRubroNegra(ArvoreRubroNegra* arvore, int valor) {
+    if (vaziaRubroNegra(arvore)) {
+        counter++;
+        arvore->raiz = criarNoRubroNegra(arvore, arvore->nulo, valor);
         arvore->raiz->cor = Preto;
 
         return arvore->raiz;
     } else {
-        NoRubroNegra* no = adicionarNoRubroNegra(arvore, arvore->raiz, valor, contador);
-        balancearRubroNegra(arvore, no, contador);
+        NoRubroNegra* no = adicionarNoRubroNegra(arvore, arvore->raiz, valor);
+        balancearRubroNegra(arvore, no);
 
         return no;
     }
@@ -96,131 +92,102 @@ void percorrerProfundidadePosOrder(ArvoreRubroNegra* arvore, NoRubroNegra* no, v
     }
 }
 
-void balancearRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int * contador) {
+void balancearRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no) {
     while (no->pai->cor == Vermelho) {
-        // TODO: contador+=2
+        counter++;
         if (no->pai == no->pai->pai->esquerda) {
             NoRubroNegra *tio = no->pai->pai->direita;
 
-            (*contador) += 1;
             if (tio->cor == Vermelho) {
-                (*contador) += 1;
+                counter++;
                 tio->cor = Preto; //Caso 1
-                (*contador) += 1;
                 no->pai->cor = Preto;
-                (*contador) += 1;
                 no->pai->pai->cor = Vermelho; //Caso 1
                 no = no->pai->pai; //Caso 1
             } else {
-                (*contador) += 1;
                 if (no == no->pai->direita) {
                     no = no->pai; //Caso 2
-                    rotacionarEsquerdaRubroNegra(arvore, no, contador); //Caso 2
+                    rotacionarEsquerdaRubroNegra(arvore, no); //Caso 2
                 } else {
-                    (*contador) += 1;
+                    counter++;
                     no->pai->cor = Preto;
-                    (*contador) += 1;
                     no->pai->pai->cor = Vermelho; //Caso 3
-                    rotacionarDireitaRubroNegra(arvore, no->pai->pai, contador); //Caso 3
+                    rotacionarDireitaRubroNegra(arvore, no->pai->pai); //Caso 3
                 }
             }
         } else {
             NoRubroNegra *tio = no->pai->pai->esquerda;
 
-            (*contador) += 1;
             if (tio->cor == Vermelho) {
-                (*contador) += 1;
+                counter++;
                 tio->cor = Preto; //Caso 1
-                (*contador) += 1;
                 no->pai->cor = Preto;
 
-                (*contador) += 1;
                 no->pai->pai->cor = Vermelho; //Caso 1
                 no = no->pai->pai; //Caso 1
             } else {
-                (*contador) += 1;
                 if (no == no->pai->esquerda) {
                     no = no->pai; //Caso 2
-                    rotacionarDireitaRubroNegra(arvore, no, contador); //Caso 2
+                    rotacionarDireitaRubroNegra(arvore, no); //Caso 2
                 } else {
-                    (*contador) += 1;
+                    counter++;
                     no->pai->cor = Preto;
-                    (*contador) += 1;
                     no->pai->pai->cor = Vermelho; //Caso 3
-                    rotacionarEsquerdaRubroNegra(arvore, no->pai->pai, contador); //Caso 3
+                    rotacionarEsquerdaRubroNegra(arvore, no->pai->pai); //Caso 3
                 }
             }
         }
     }
-    (*contador) += 1;
     arvore->raiz->cor = Preto; //Conserta possível quebra regra 2
 }
 
-void rotacionarEsquerdaRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int * contador) {
+void rotacionarEsquerdaRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no) {
     NoRubroNegra* direita = no->direita;
-    (*contador) += 1;
+    counter++;
     no->direita = direita->esquerda;
 
-    (*contador) += 1;
     if (direita->esquerda != arvore->nulo) {
-        (*contador) += 1;
         direita->esquerda->pai = no;
     }
 
-    (*contador) += 1;
     direita->pai = no->pai;
 
-    (*contador) += 1;
     if (no->pai == arvore->nulo) {
-        (*contador) += 1;
         arvore->raiz = direita;
     } else if (no == no->pai->esquerda) {
-        (*contador) += 1;
         no->pai->esquerda = direita;
     } else {
-        (*contador) += 1;
         no->pai->direita = direita;
     }
 
-    (*contador) += 1;
     direita->esquerda = no;
-    (*contador) += 1;
     no->pai = direita;
 }
 
-void rotacionarDireitaRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no, int * contador) {
+void rotacionarDireitaRubroNegra(ArvoreRubroNegra* arvore, NoRubroNegra* no) {
     NoRubroNegra* esquerda = no->esquerda;
-    (*contador) += 1;
+    counter++;
     no->esquerda = esquerda->direita;
 
-    (*contador) += 1;
     if (esquerda->direita != arvore->nulo) {
-        (*contador) += 1;
         esquerda->direita->pai = no;
     }
 
-    (*contador) += 1;
     esquerda->pai = no->pai;
 
-    (*contador) += 1;
     if (no->pai == arvore->nulo) {
-        (*contador) += 1;
         arvore->raiz = esquerda;
     } else if (no == no->pai->esquerda) {
-        (*contador) += 1;
         no->pai->esquerda = esquerda;
     } else {
-        (*contador) += 1;
         no->pai->direita = esquerda;
     }
 
-    (*contador) += 1;
     esquerda->direita = no;
-    (*contador) += 1;
     no->pai = esquerda;
 }
 
-void percorrerProfundidadeInOrderRubroNegra(ArvoreRubroNegra * arvore, NoRubroNegra * no, void (*callback)(int), int * contador) {
+void percorrerProfundidadeInOrderRubroNegra(ArvoreRubroNegra * arvore, NoRubroNegra * no, void (*callback)(int)) {
     if (no != arvore->nulo) {
 
 
