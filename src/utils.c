@@ -13,8 +13,8 @@ char b10AvgCasePath[] = "data/avgCaseB10.csv";
 char rubroNegraAvgCasePath[] = "data/avgCaseRubroNegra.csv";
 
 int numberOfKeys = 1000;
-int step = 2;
-int numberOfExecutions = 10;
+int step = 1;
+int numberOfExecutions = 100;
 int sizeLimit = 1000;
 
 register_t counter = 0;

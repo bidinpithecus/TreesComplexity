@@ -1,6 +1,11 @@
 import pandas as pd
 import plotly.express as px
+import os
 import plotly.graph_objects as go
+
+path = "data/graphs"
+if not os.path.exists(path):
+    os.mkdir(path)
 
 xAxis = "chaves"
 yAxis = "operações"
@@ -36,4 +41,6 @@ allFig.update_layout({
     'plot_bgcolor': 'rgba(255, 255, 255, 255)',
     'paper_bgcolor': 'rgba(255,255,255,255)'
 })
+
 allFig.show()
+allFig.write_image(path + "/worstCase.svg")

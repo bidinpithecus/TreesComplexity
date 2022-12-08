@@ -17,9 +17,8 @@ void populateCsvAvgCaseAVL(char path[], char modes[]) {
 		a_avl = criarArvoreAVL();
 
 		for (int i = 0; i < numberOfKeys; i++) {
-			int key = randomNum(sizeLimit);
-			adicionarAVL(a_avl, key);
-			fprintf(fptr, "%d,%ld\n", key, counter);
+			adicionarAVL(a_avl, randomNum(sizeLimit));
+			fprintf(fptr, "%d,%ld\n", i, counter);
 			counter = 0;
 		}
 	}
@@ -45,9 +44,8 @@ void populateCsvAvgCaseBTree(char path[], char modes[], int order) {
 		arvoreB = criaArvoreB(order);
 
 		for (int i = 0; i < numberOfKeys; i++) {
-			int key = randomNum(sizeLimit);
-			adicionaChaveArvoreB(arvoreB, j);
-			fprintf(fptr, "%d,%ld\n", key, counter);
+			adicionaChaveArvoreB(arvoreB, randomNum(sizeLimit));
+			fprintf(fptr, "%d,%ld\n", i, counter);
 			counter = 0;
 		}
 	}
@@ -73,9 +71,8 @@ void populateCsvAvgCaseRubroNegra(char path[], char modes[]) {
 		a_rubro_negra = criarRubroNegra();
 
 		for (int i = 0; i < numberOfKeys; i++) {
-			int key = randomNum(sizeLimit);
-			adicionarRubroNegra(a_rubro_negra, j);
-			fprintf(fptr, "%d,%ld\n", key, counter);
+			adicionarRubroNegra(a_rubro_negra, randomNum(sizeLimit));
+			fprintf(fptr, "%d,%ld\n", i, counter);
 			counter = 0;
 		}
 	}
